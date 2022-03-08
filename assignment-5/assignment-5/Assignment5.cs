@@ -20,8 +20,9 @@ namespace assignment_5
             rows = int.Parse(input.Split(' ')[0]);
             columns = int.Parse(input.Split(' ')[1]);
             buildMaze(rows, columns);
-            markReachable(rows, columns);
+            int treasure = traverseMaze(rows, columns);
             printMaze(rows, columns);
+            Console.WriteLine(treasure);
         }
 
         static void buildMaze(int rows, int columns)
@@ -44,7 +45,9 @@ namespace assignment_5
         }
 
         // This function marks all the reachable cells and acts as the WFS algorithm
-        static void markReachable(int rows, int columns) {
+        // and returns the total treasure that can be reached
+        static int traverseMaze(int rows, int columns) {
+            int totalTreasure = 0;
             visited = new int[rows, columns];
             bag.Push(start[0]);
             bag.Push(start[1]);
@@ -54,6 +57,12 @@ namespace assignment_5
                 int row = bag.Pop();
                 //if v is unmarked
                 if (visited[row,col] == 0) {
+                    try {
+                        totalTreasure += int.Parse(maze[row,col]);
+                    }
+                    catch (Exception e) {
+                        //do nothing
+                    }
                     //mark v as visited
                     visited[row,col] = 1;
                     //push v's neighbors onto the bag
@@ -77,6 +86,7 @@ namespace assignment_5
                     }
                 }
             }
+            return totalTreasure;
         }
 
         static bool monsterNearby(int row, int col) {
