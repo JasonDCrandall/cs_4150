@@ -9,9 +9,12 @@ namespace assignment_5
         // For my sanity: The order of pushing onto the stack is row, col
         // The order of popping from the stack is col, row
         static string [,] maze;
+        // static int [,] initialVisited;
+        // static bool isInitialized = false;
         static int [,] visited;
         static int[] start = new int[2];
         static Stack<int> bag = new Stack<int>();
+        static int lowestTreasure = int.MaxValue;
         static void Main(string[] args)
         {
             int rows;
@@ -20,9 +23,10 @@ namespace assignment_5
             rows = int.Parse(input.Split(' ')[0]);
             columns = int.Parse(input.Split(' ')[1]);
             buildMaze(rows, columns);
-            int treasure = traverseMaze(rows, columns);
-            printMaze(rows, columns);
-            Console.WriteLine(treasure);
+            lowestTreasure = traverseMaze(rows, columns);
+            int[] bestCoordinates = findOptimalPlacement(rows, columns);
+            Console.WriteLine(bestCoordinates[0] + " " + bestCoordinates[1]);
+            Console.WriteLine(lowestTreasure);
         }
 
         static void buildMaze(int rows, int columns)
@@ -59,6 +63,10 @@ namespace assignment_5
                 if (visited[row,col] == 0) {
                     try {
                         totalTreasure += int.Parse(maze[row,col]);
+                        //if (totalTreasure > lowestTreasure)
+                        //{
+                        //    return totalTreasure;
+                        //}
                     }
                     catch (Exception e) {
                         //do nothing
@@ -86,6 +94,11 @@ namespace assignment_5
                     }
                 }
             }
+            // if (!isInitialized)
+            // {
+            //     initialVisited = visited;
+            //     isInitialized = true;
+            // }
             return totalTreasure;
         }
 
@@ -105,8 +118,23 @@ namespace assignment_5
             return false;
         }
 
-        static void findOptimalPlacement() {
-
+        static int[] findOptimalPlacement(int rows, int columns) {
+            int[] bestCoordinates = new int[2] {-1, -1};
+            for (int i = 0; i < rows; i++) {
+                for (int j = 0; j < columns; j++) {
+                    if (!tooCloseToPlayer(i,j) && maze[i,j] == ".") {
+                        maze[i,j] = "m";
+                        int treasure = traverseMaze(rows, columns);
+                        maze[i,j] = ".";
+                        if (treasure < lowestTreasure) {
+                            lowestTreasure = treasure;
+                            bestCoordinates[0] = i;
+                            bestCoordinates[1] = j;
+                        }
+                    }
+                }
+            }
+            return bestCoordinates;
         }
 
         static bool tooCloseToPlayer(int row, int column) {
@@ -128,7 +156,7 @@ namespace assignment_5
             return false;
         }
 
-        static void printMaze(int rows, int columns) {
+        static void printMaze(int rows, int columns, int[,] visited) {
             for (int i = 0; i < rows; i++)
             {
                 for (int j = 0; j < columns; j++)
