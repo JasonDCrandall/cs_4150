@@ -109,6 +109,25 @@ namespace assignment_5
 
         }
 
+        static bool tooCloseToPlayer(int row, int column) {
+            if (row == start[0] && column == start[1]) {
+                return true;
+            }
+            if (row - 1 == start[0] && column == start[1]) {
+                return true;
+            }
+            if (row + 1 == start[0] && column == start[1]) {
+                return true;
+            }
+            if (row == start[0] && column - 1 == start[1]) {
+                return true;
+            }
+            if (row == start[0] && column + 1 == start[1]) {
+                return true;
+            }
+            return false;
+        }
+
         static void printMaze(int rows, int columns) {
             for (int i = 0; i < rows; i++)
             {
