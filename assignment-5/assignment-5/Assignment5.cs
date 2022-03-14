@@ -5,16 +5,11 @@ namespace assignment_5
 {
     class Assignment5
     {
-
-        // For my sanity: The order of pushing onto the stack is row, col
-        // The order of popping from the stack is col, row
-        static string [,] maze;
-        // static int [,] initialVisited;
-        // static bool isInitialized = false;
+        static char [,] maze;
         static int [,] visited;
         static int[] start = new int[2];
         static Stack<int> bag = new Stack<int>();
-        static int lowestTreasure = int.MaxValue;
+        static int lowestTreasure;
         static void Main(string[] args)
         {
             int rows;
@@ -31,7 +26,7 @@ namespace assignment_5
 
         static void buildMaze(int rows, int columns)
         {
-            maze = new string[rows, columns];
+            maze = new char[rows, columns];
             for (int i = 0; i < rows; i++)
             {
                 string input = Console.ReadLine();
@@ -43,7 +38,7 @@ namespace assignment_5
                         start[0] = i;
                         start[1] = j;
                     }
-                    maze[i,j] = input[j].ToString();
+                    maze[i,j] = input[j];
                 }
             }
         }
@@ -61,58 +56,51 @@ namespace assignment_5
                 int row = bag.Pop();
                 //if v is unmarked
                 if (visited[row,col] == 0) {
-                    try {
-                        totalTreasure += int.Parse(maze[row,col]);
-                        //if (totalTreasure > lowestTreasure)
-                        //{
-                        //    return totalTreasure;
-                        //}
-                    }
-                    catch (Exception e) {
-                        //do nothing
+                    if (char.IsDigit(maze[row,col])) {
+                        totalTreasure += maze[row,col] - 48;
+                        if (totalTreasure > lowestTreasure)
+                        {
+                            bag.Clear();
+                           return totalTreasure;
+                        }
                     }
                     //mark v as visited
                     visited[row,col] = 1;
                     //push v's neighbors onto the bag
                     if(!monsterNearby(row, col)) {
-                        if (row - 1 >= 0 && maze[row - 1,col] != "#") {
+                        if (row - 1 >= 0 && maze[row - 1,col] != '#') {
                             bag.Push(row - 1);
                             bag.Push(col);
                         }
-                        if (row + 1 < rows && maze[row + 1,col] != "#") {
+                        if (row + 1 < rows && maze[row + 1,col] != '#') {
                             bag.Push(row + 1);
                             bag.Push(col);
                         }
-                        if (col - 1 >= 0 && maze[row,col - 1] != "#") {
+                        if (col - 1 >= 0 && maze[row,col - 1] != '#') {
                             bag.Push(row);
                             bag.Push(col - 1);
                         }
-                        if (col + 1 < columns && maze[row,col + 1] != "#") {
+                        if (col + 1 < columns && maze[row,col + 1] != '#') {
                             bag.Push(row);
                             bag.Push(col + 1);
                         }
                     }
                 }
             }
-            // if (!isInitialized)
-            // {
-            //     initialVisited = visited;
-            //     isInitialized = true;
-            // }
             return totalTreasure;
         }
 
         static bool monsterNearby(int row, int col) {
-            if (row - 1 >= 0 && maze[row - 1,col] == "m") {
+            if (row - 1 >= 0 && maze[row - 1,col] == 'm') {
                 return true;
             }
-            if (row + 1 < maze.GetLength(0) && maze[row + 1,col] == "m") {
+            if (row + 1 < maze.GetLength(0) && maze[row + 1,col] == 'm') {
                 return true;
             }
-            if (col - 1 >= 0 && maze[row,col - 1] == "m") {
+            if (col - 1 >= 0 && maze[row,col - 1] == 'm') {
                 return true;
             }
-            if (col + 1 < maze.GetLength(1) && maze[row,col + 1] == "m") {
+            if (col + 1 < maze.GetLength(1) && maze[row,col + 1] == 'm') {
                 return true;
             }
             return false;
@@ -122,10 +110,10 @@ namespace assignment_5
             int[] bestCoordinates = new int[2] {-1, -1};
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < columns; j++) {
-                    if (!tooCloseToPlayer(i,j) && maze[i,j] == ".") {
-                        maze[i,j] = "m";
+                    if (!tooCloseToPlayer(i,j) && maze[i,j] == '.') {
+                        maze[i,j] = 'm';
                         int treasure = traverseMaze(rows, columns);
-                        maze[i,j] = ".";
+                        maze[i,j] = '.';
                         if (treasure < lowestTreasure) {
                             lowestTreasure = treasure;
                             bestCoordinates[0] = i;
@@ -154,17 +142,6 @@ namespace assignment_5
                 return true;
             }
             return false;
-        }
-
-        static void printMaze(int rows, int columns, int[,] visited) {
-            for (int i = 0; i < rows; i++)
-            {
-                for (int j = 0; j < columns; j++)
-                {
-                    Console.Write(visited[i,j]);
-                }
-                Console.WriteLine();
-            }
         }
     }
 }
