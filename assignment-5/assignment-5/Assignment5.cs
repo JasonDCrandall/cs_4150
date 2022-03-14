@@ -4,8 +4,6 @@
  *
  * By: Jason Crandall u0726408
 */
-
-
 using System;
 using System.Collections.Generic;
 
@@ -17,7 +15,7 @@ namespace assignment_5
         static int [,] visited;
         static int[] start = new int[2];
         static Stack<int> bag = new Stack<int>();
-        static int lowestTreasure;
+        static int lowestTreasure = int.MaxValue;
         static void Main(string[] args)
         {
             int rows;
@@ -32,7 +30,6 @@ namespace assignment_5
             Console.WriteLine(lowestTreasure);
         }
 
-        // Initial construction of the maze
         static void buildMaze(int rows, int columns)
         {
             maze = new char[rows, columns];
@@ -51,26 +48,6 @@ namespace assignment_5
                 }
             }
         }
-        
-        // This function stores the coordinates of the optimal placement of the monster
-        static int[] findOptimalPlacement(int rows, int columns) {
-            int[] bestCoordinates = new int[2] {-1, -1};
-            for (int i = 0; i < rows; i++) {
-                for (int j = 0; j < columns; j++) {
-                    if (!tooCloseToPlayer(i,j) && maze[i,j] == '.') {
-                        maze[i,j] = 'm';
-                        int treasure = traverseMaze(rows, columns);
-                        maze[i,j] = '.';
-                        if (treasure < lowestTreasure) {
-                            lowestTreasure = treasure;
-                            bestCoordinates[0] = i;
-                            bestCoordinates[1] = j;
-                        }
-                    }
-                }
-            }
-            return bestCoordinates;
-        }
 
         // This function marks all the reachable cells and acts as the WFS algorithm
         // and returns the total treasure that can be reached
@@ -85,8 +62,6 @@ namespace assignment_5
                 int row = bag.Pop();
                 //if v is unmarked
                 if (visited[row,col] == 0) {
-
-                    // check if found treasure is already more than the most optimal
                     if (char.IsDigit(maze[row,col])) {
                         totalTreasure += maze[row,col] - 48;
                         if (totalTreasure > lowestTreasure)
@@ -121,8 +96,6 @@ namespace assignment_5
             return totalTreasure;
         }
 
-
-        // Helper function for checking if a monster is in adjacent cells
         static bool monsterNearby(int row, int col) {
             if (row - 1 >= 0 && maze[row - 1,col] == 'm') {
                 return true;
@@ -139,9 +112,25 @@ namespace assignment_5
             return false;
         }
 
+        static int[] findOptimalPlacement(int rows, int columns) {
+            int[] bestCoordinates = new int[2] {-1, -1};
+            for (int i = 0; i < rows; i++) {
+                for (int j = 0; j < columns; j++) {
+                    if (!tooCloseToPlayer(i,j) && maze[i,j] == '.') {
+                        maze[i,j] = 'm';
+                        int treasure = traverseMaze(rows, columns);
+                        maze[i,j] = '.';
+                        if (treasure < lowestTreasure) {
+                            lowestTreasure = treasure;
+                            bestCoordinates[0] = i;
+                            bestCoordinates[1] = j;
+                        }
+                    }
+                }
+            }
+            return bestCoordinates;
+        }
 
-        // Helper function for checking if the monster is too close to the player for
-        // placement purposes
         static bool tooCloseToPlayer(int row, int column) {
             if (row == start[0] && column == start[1]) {
                 return true;
