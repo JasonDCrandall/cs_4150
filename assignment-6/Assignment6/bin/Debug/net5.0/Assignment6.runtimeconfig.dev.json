@@ -1,8 +1,8 @@
 {
   "runtimeOptions": {
     "additionalProbingPaths": [
-      "/Users/jasoncrandall/.dotnet/store/|arch|/|tfm|",
-      "/Users/jasoncrandall/.nuget/packages"
+      "C:\\Users\\jcran\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\jcran\\.nuget\\packages"
     ]
   }
 }
