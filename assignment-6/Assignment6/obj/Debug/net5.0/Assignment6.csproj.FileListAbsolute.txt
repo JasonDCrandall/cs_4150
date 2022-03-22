@@ -1,0 +1,15 @@
+/Users/jasoncrandall/Documents/School/CS_4150/assignment-6/Assignment6/bin/Debug/net5.0/Assignment6.deps.json
+/Users/jasoncrandall/Documents/School/CS_4150/assignment-6/Assignment6/bin/Debug/net5.0/Assignment6.runtimeconfig.json
+/Users/jasoncrandall/Documents/School/CS_4150/assignment-6/Assignment6/bin/Debug/net5.0/Assignment6.runtimeconfig.dev.json
+/Users/jasoncrandall/Documents/School/CS_4150/assignment-6/Assignment6/bin/Debug/net5.0/Assignment6.dll
+/Users/jasoncrandall/Documents/School/CS_4150/assignment-6/Assignment6/bin/Debug/net5.0/ref/Assignment6.dll
+/Users/jasoncrandall/Documents/School/CS_4150/assignment-6/Assignment6/bin/Debug/net5.0/Assignment6.pdb
+/Users/jasoncrandall/Documents/School/CS_4150/assignment-6/Assignment6/obj/Debug/net5.0/Assignment6.csproj.AssemblyReference.cache
+/Users/jasoncrandall/Documents/School/CS_4150/assignment-6/Assignment6/obj/Debug/net5.0/Assignment6.GeneratedMSBuildEditorConfig.editorconfig
+/Users/jasoncrandall/Documents/School/CS_4150/assignment-6/Assignment6/obj/Debug/net5.0/Assignment6.AssemblyInfoInputs.cache
+/Users/jasoncrandall/Documents/School/CS_4150/assignment-6/Assignment6/obj/Debug/net5.0/Assignment6.AssemblyInfo.cs
+/Users/jasoncrandall/Documents/School/CS_4150/assignment-6/Assignment6/obj/Debug/net5.0/Assignment6.csproj.CoreCompileInputs.cache
+/Users/jasoncrandall/Documents/School/CS_4150/assignment-6/Assignment6/obj/Debug/net5.0/Assignment6.dll
+/Users/jasoncrandall/Documents/School/CS_4150/assignment-6/Assignment6/obj/Debug/net5.0/ref/Assignment6.dll
+/Users/jasoncrandall/Documents/School/CS_4150/assignment-6/Assignment6/obj/Debug/net5.0/Assignment6.pdb
+/Users/jasoncrandall/Documents/School/CS_4150/assignment-6/Assignment6/obj/Debug/net5.0/Assignment6.genruntimeconfig.cache
