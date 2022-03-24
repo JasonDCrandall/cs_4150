@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*
+ * Problem Set 6: This program provides a valid ordering of quests for two players
+ *                using topological sort
+ * 
+ * By: Jason Crandall u0726408
+ */
+
+using System;
 using System.Collections.Generic;
 
 namespace Assignment6
@@ -24,6 +31,10 @@ namespace Assignment6
                 Console.WriteLine("Unsolvable");
         }
 
+        /// <summary>
+        /// This method initializes the graph structure with two separate components, one for 
+        /// player one, the other for player two
+        /// </summary>
         static void buildGraphComponents()
         {
             nodesFrom = new Dictionary<string, HashSet<string>>();
@@ -67,6 +78,11 @@ namespace Assignment6
             }
         }
 
+        /// <summary>
+        /// This method gathers the list of coop nodes, then modifies the 
+        /// two exisiting graph components to ensure that they point to the 
+        /// same node
+        /// </summary>
         static void updateCoopDependencies()
         {
             int coopDependencies = int.Parse(Console.ReadLine());
@@ -115,6 +131,9 @@ namespace Assignment6
             }
         }
 
+        /// <summary>
+        /// This is the parent method that initializes the recursive topological sort
+        /// </summary>
         static void topologicalSort()
         {
             sortedNodes = new string[nodesFrom.Count];
@@ -128,6 +147,13 @@ namespace Assignment6
             }
         }
 
+        /// <summary>
+        /// Recursive topological sort method that positions the node in the 
+        /// sorted array and returns the new clock status
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="clock"></param>
+        /// <returns></returns>
         static int topSortDFS(string node, int clock)
         {
             nodeStatus[node] = -1;
@@ -148,6 +174,9 @@ namespace Assignment6
             return clock;
         }
 
+        /// <summary>
+        /// Method for desplaying the solution
+        /// </summary>
         static void printSolution()
         {
             foreach (string node in sortedNodes)
@@ -155,78 +184,5 @@ namespace Assignment6
                 Console.WriteLine(node);
             }
         }
-
-        //static void buildGraphs() {
-        //    int player1Connections = int.Parse(Console.ReadLine());
-        //    player1Nodes = new Dictionary<string, HashSet<string>>();
-        //    for (int i = 0; i < player1Connections; i++) {
-        //        string[] input = Console.ReadLine().Split(' ');
-        //        string node1 = input[0];
-        //        string node2 = input[1];
-        //        if (!player1Nodes.ContainsKey(node1)) {
-        //            player1Nodes.Add(node1, new HashSet<string>());
-        //        }
-        //        if (!player1Nodes.ContainsKey(node2))
-        //        {
-        //            player1Nodes.Add(node2, new HashSet<string>());
-        //        }
-        //        player1Nodes[node1].Add(node2);
-        //    }
-
-        //    int player2Connections = int.Parse(Console.ReadLine());
-        //    player2Nodes = new Dictionary<string, HashSet<string>>();
-        //    for (int i = 0; i < player2Connections; i++) {
-        //        string[] input = Console.ReadLine().Split(' ');
-        //        string node1 = input[0];
-        //        string node2 = input[1];
-        //        if (!player2Nodes.ContainsKey(node1)) {
-        //            player2Nodes.Add(node1, new HashSet<string>());
-        //        }
-        //        if (!player2Nodes.ContainsKey(node2))
-        //        {
-        //            player2Nodes.Add(node2, new HashSet<string>());
-        //        }
-        //        player2Nodes[node1].Add(node2);
-        //    }
-        //    coopNodes = new string[int.Parse(Console.ReadLine())];
-        //    for (int i = 0; i < coopNodes.Length; i++) {
-        //        coopNodes[i] = Console.ReadLine();
-        //    }
-        //}
-
-        //static string[] topologicalSort(Dictionary<string, HashSet<string>> nodes, Dictionary<string, int> marked, Dictionary<string, int> status)
-        //{
-        //    string[] sorted = new string[nodes.Count];
-        //    int clock = nodes.Count;
-        //    foreach(string key in nodes.Keys)
-        //    {
-        //        if (status[key] == 0)
-        //        {
-        //            clock = topSortDFS(key, clock, ref nodes, ref marked, ref status, ref sorted);
-        //        }
-        //    }
-
-        //    return sorted;
-        //}
-
-        //static int topSortDFS(string node, int clock, ref Dictionary<string, HashSet<string>> nodes, ref Dictionary<string, int> marked, ref Dictionary<string, int> status, ref string[] sorted)
-        //{
-        //    status[node] = -1;
-        //    foreach (string edge in nodes[node])
-        //    {
-        //        if (status[edge] == 0)
-        //        {
-        //            clock = topSortDFS(edge, clock, ref nodes, ref marked, ref status, ref sorted);
-        //        }
-        //        else if (status[edge] == -1)
-        //        {
-        //            Console.WriteLine("failed gracefully");
-        //        }
-        //    }
-        //    status[node] = 1;
-        //    sorted[clock-1] = node;
-        //    clock--;
-        //    return clock;
-        //}
     }
 }
