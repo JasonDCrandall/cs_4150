@@ -8,15 +8,18 @@ def main():
     connectivity = int(inputArray[4])
     algorithm = inputArray[5]
     startVertex = 0
-
-    if algorithm == "Jarnik":
-        startVertex = int(inputArray[6])
-
     weights = generate_weights(seed, vertexCount, minWeight, maxWeight, connectivity)
     edges = []
 
     if algorithm == "Jarnik":
+        startVertex = int(inputArray[6])
         edges = jarnikAlgorithm(weights, startVertex)
+
+    elif algorithm == "Kruskal":
+        edges = kruskalAlgorithm(weights)
+
+    elif algorithm == "Boruvka":
+        edges = boruvkaAlgorithm(weights)
 
     print(getTotalWeight(edges))
     print(len(edges))
@@ -55,11 +58,24 @@ class Edge:
         self.weight = weight
     
     def __lt__(self, other):
-        return self.weight < other.weight
+        if self.weight < other.weight:
+            return True
+        elif self.weight > other.weight:
+            return False
+        elif min(self.from_v, self.to_v) < min(other.from_v, other.to_v):
+            return True
+        elif min(self.from_v, self.to_v) > min(other.from_v, other.to_v):
+            return False
+        elif max(self.from_v, self.to_v) < max(other.from_v, other.to_v):
+            return True
+        elif max(self.from_v, self.to_v) > max(other.from_v, other.to_v):
+            return False
+
     def __gt__(self, other):
-        return self.weight > other.weight
+        return other.__lt__(self)
+
     def __eq__(self, other):
-        return self.weight == other.weight
+        return self.weight == other.weight and self.from_v == other.from_v and self.to_v == other.to_v
 
     def printEdge(self):
         print("{} {}".format(self.from_v, self.to_v))
@@ -91,6 +107,31 @@ def jarnikAlgorithm(weights:list, start_vertex:int):
                     priorityQueue.append(Edge(edge.to_v, v, weights[edge.to_v][v]))
             priorityQueue.sort()
     return edges
+
+def kruskalAlgorithm(weights:list):
+    edges = []
+    sortedEdges = []
+    for i in range(len(weights)):
+        for j in range(len(weights[i])):
+            if weights[i][j] != 0:
+                sortedEdges.append(Edge(i, j, weights[i][j]))
+    sortedEdges.sort()
+    vertexMap = {}
+    for v in range(len(weights)):
+        vertexMap[v] = {v}
+    for i in range(len(sortedEdges)):
+        edge = sortedEdges[i]
+        if vertexMap[edge.from_v] != vertexMap[edge.to_v]:
+            edges.append(edge)
+            updatedComponent = vertexMap[edge.from_v].union(vertexMap[edge.to_v])
+            for v in updatedComponent:
+                vertexMap[v] = updatedComponent
+    return edges
+
+def boruvkaAlgorithm(weights:list):
+    edges = []
+    return edges
+
 
 def printEdges(edges:list):
     for edge in edges:
