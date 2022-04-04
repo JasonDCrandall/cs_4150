@@ -1,3 +1,6 @@
+from queue import PriorityQueue
+
+
 def main():
     rawInput = input()
     inputArray = rawInput.split(" ")
@@ -84,29 +87,34 @@ class Edge:
 
 
 def jarnikAlgorithm(weights:list, start_vertex:int):
-    unmarked = [v for v in range(len(weights))]
+    unmarked = [1]*len(weights)
+    unmarkedCount = len(weights)
+    allEdges = {}
+    for v in range(len(weights)):
+        allEdges[v] = []
+        for j in range(len(weights[v])):
+            if weights[v][j] != 0:
+                allEdges[v].append(Edge(v, j, weights[v][j]))
     edges = []
-    priorityQueue = []
-    unmarked.remove(start_vertex)
-    for v in range(len(weights[start_vertex])):
-        if weights[start_vertex][v] != 0:
-            priorityQueue.append(Edge(start_vertex, v, weights[start_vertex][v]))
-    priorityQueue.sort()
-    while unmarked:
-        edge = priorityQueue.pop(0)
-        if edge.from_v in unmarked:
+    pq = PriorityQueue()
+    unmarked[start_vertex] = 0
+    unmarkedCount -= 1
+    for i in range(len(allEdges[start_vertex])):
+        pq.put(allEdges[start_vertex][i])
+    while unmarkedCount > 0:
+        edge = pq.get()
+        if unmarked[edge.from_v] == 1:
             edges.append(edge)
-            unmarked.remove(edge.from_v)
-            for v in range(len(weights[edge.from_v])):
-                if weights[edge.from_v][v] != 0:
-                    priorityQueue.append(Edge(edge.from_v, v, weights[edge.from_v][v]))
-        if edge.to_v in unmarked:
+            unmarked[edge.from_v] = 0
+            unmarkedCount -= 1
+            for i in range(len(allEdges[edge.from_v])):
+                pq.put(allEdges[edge.from_v][i])
+        if unmarked[edge.to_v] == 1:
             edges.append(edge)
-            unmarked.remove(edge.to_v)
-            for v in range(len(weights[edge.to_v])):
-                if weights[edge.to_v][v] != 0:
-                    priorityQueue.append(Edge(edge.to_v, v, weights[edge.to_v][v]))
-        priorityQueue.sort()
+            unmarked[edge.to_v] = 0
+            unmarkedCount -= 1
+            for i in range(len(allEdges[edge.to_v])):
+                pq.put(allEdges[edge.to_v][i])
     return edges
 
 def kruskalAlgorithm(weights:list):
@@ -117,6 +125,7 @@ def kruskalAlgorithm(weights:list):
             if weights[i][j] != 0:
                 sortedEdges.append(Edge(i, j, weights[i][j]))
     sortedEdges.sort()
+    print('after sort')
     vertexMap = {}
     for v in range(len(weights)):
         vertexMap[v] = {v}
@@ -136,8 +145,8 @@ def boruvkaAlgorithm(weights:list):
     for v in range(len(weights)):
         marked[v] = [False]*len(weights)
     edges = []
-    component = [i for i in range(len(weights))]
-    count = len(weights)
+    component = [0]*len(weights)
+    count = countAndLabel(weights, edges, component)
     while count > 1:
         addAllSafeEdges(weights, edges, count, component)
         count = countAndLabel(weights, edges, component)
@@ -145,9 +154,9 @@ def boruvkaAlgorithm(weights:list):
 
 def countAndLabel(weights:list, edges:list, component:list):
     count = 0
-    unmarked = [v for v in range(len(weights))]
+    unmarked = [1]*len(weights)
     for v in range(len(weights)):
-        if v in unmarked:
+        if unmarked[v] == 1:
             count += 1
             labelOne(weights, edges, v, count, unmarked, component)
     return count
@@ -157,23 +166,27 @@ def labelOne(weights:list, edges:list, v:int, count:int, unmarked:list, componen
     bag.append(v)
     while bag:
         v = bag.pop(0)
-        if v in unmarked:
-            unmarked.remove(v)
-            component[v] = count
-            for w in range(len(weights[v])):
-                if weights[v][w] != 0:
-                    if Edge(v, w, weights[v][w]) not in edges:
-                        bag.append(w)
+        #[0 1 2 3 5 6 7 8 9]
+        if unmarked[v] == 1:
+            unmarked[v] = 0
+            component[v] = count-1
+            for w in range(len(edges)):
+                if edges[w].from_v == v:
+                    bag.append(edges[w].to_v)
+                elif edges[w].to_v == v:
+                    bag.append(edges[w].from_v)
+                # if weights[v][w] != 0:
+                #     bag.append(w)
 
 
 def addAllSafeEdges(weights:list, edges:list, count:int, component:list):
-    print('adding safe edges')
     safe = [None for _ in range(count)]
     allEdges = []
     for i in range(len(weights)):
         for j in range(len(weights[i])):
             if weights[i][j] != 0:
                 allEdges.append(Edge(i, j, weights[i][j]))
+                allEdges.append(Edge(j, i, weights[i][j]))
     for edge in allEdges:
         u = edge.from_v
         v = edge.to_v
