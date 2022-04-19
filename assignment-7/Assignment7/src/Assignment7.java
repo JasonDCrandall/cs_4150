@@ -1,3 +1,9 @@
+/*
+ * Problem Set 7: This program is an exercise of building MST's using 3 different algorithms.
+ * 
+ * By: Jason Crandall u0726408
+*/
+
 import java.util.*;
 
 @SuppressWarnings("unchecked")
@@ -33,6 +39,9 @@ public class Assignment7 {
         }
     }
 
+    /*
+     * Class representing and edge with the tie breaker code included
+    */
     public static class Edge implements Comparable {
         public int from;
         public int to;
@@ -68,6 +77,9 @@ public class Assignment7 {
         }
     }
 
+    /*
+     * Generates a random graph with the given parameters
+    */
     public static int[][] generateWeights (int seed, int vertexCount, int minWeight, int maxWeight, int connectivity)  // Non-zero seed, cap vertices at 100, weights at 10000 
 	{
 		int[][] weights = new int[vertexCount][vertexCount];
@@ -103,6 +115,10 @@ public class Assignment7 {
 		return weights;
 	}
 
+    /*
+     * Implementation of Jarniks algorithm using Java's built in priority queue
+     * and the implemented comparator of the Edge class
+    */
     public static ArrayList<Edge> jarnik(int[][] weights, int startVertex) {
         ArrayList<Edge> edges = new ArrayList<Edge>();
         int[] unmarked = new int[weights.length];
@@ -148,6 +164,9 @@ public class Assignment7 {
         return edges;
     }
 
+    /*
+     * Implementation of Kruskals algorithm
+    */
     public static ArrayList<Edge> kruskal(int[][] weights) {
         ArrayList<Edge> edges = new ArrayList<Edge>();
         ArrayList<Edge> sortedEdges = new ArrayList<Edge>();
@@ -178,6 +197,9 @@ public class Assignment7 {
         return edges;
     }
 
+    /*
+     * Implementation of Boruvka's algorithm
+    */
     public static int[][] marked;
     public static ArrayList<Edge> boruvka(int[][] weights) {
         ArrayList<Edge> edges = new ArrayList<Edge>();
